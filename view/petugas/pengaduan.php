@@ -1,19 +1,34 @@
 <?php
-require '../../function.php';
 session_start();
+
+require '../../db.php';
+
+  //simpan,tangkap session username
+ $name = $_SESSION['username'];
+
+  //cek sudahkan login
 if(!isset($_SESSION['login'])){
+
   header('location:../../index.php');
   exit;
 }
-
-if(isset($_POST['submit'])){
-  $nik = $_SESSION['nik'];
-  tanggapan($nik,$_POST);
+if($_SESSION['level'] != 'petugas'){
+  header('location:login.php');
+  exit;
 }
 
+if(isset($_POST['verify'])){
+  $idpengaduan = $_POST['verify'];
+  $_SESSION['idpengaduan'] = $idpengaduan;
+  $cek = mysqli_query($conn, "UPDATE pengaduan SET status ='proses' WHERE id_pengaduan='$idpengaduan'");
+  header('location:tanggapan.php');
+}
+  $sql = "SELECT * FROM pengaduan";
+  $execute = mysqli_query($conn,$sql);
+  $getdata = mysqli_fetch_All($execute,MYSQLI_ASSOC);
 
 ?>
-<!-- file pengaduan -->
+
 <!doctype html>
 <html lang="en">
   <head>
@@ -50,7 +65,7 @@ if(isset($_POST['submit'])){
   </head>
   <body>
     <nav class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
-  <a class="navbar-brand col-md-3 col-lg-2 mr-0 px-3" href="#">Company name</a>
+  <a class="navbar-brand col-md-3 col-lg-2 mr-0 px-3" href="#">Desa Malas</a>
   <button class="navbar-toggler position-absolute d-md-none collapsed" type="button" data-toggle="collapse" data-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
@@ -62,7 +77,7 @@ if(isset($_POST['submit'])){
   </ul>
 </nav>
 
-<div class="container-fluid">
+<div class="container-fluid ">
   <div class="row">
     <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
       <div class="sidebar-sticky pt-3">
@@ -73,38 +88,71 @@ if(isset($_POST['submit'])){
               Dashboard <span class="sr-only">(current)</span>
             </a>
           </li>
-          <li class="nav-item">
-            <a class="nav-link" href="tanggapan.php">
-              <span data-feather="file"></span>
-              tanggapn
+           <li class="nav-item">
+            <a class="nav-link " href="members.php">
+              <span data-feather="users"></span>
+              members
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link active" href="#">
+            <a class="nav-link active" href="pengaduan.php">
               <span data-feather="bar-chart-2"></span>
-             Pengaduan
+              pengaduan
             </a>
           </li>
+
         </ul>
       </div>
     </nav>
+
     <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-md-4">
-      <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom"> 
-      <h1>Buat pengaduan</h1>
+      <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+        <h1 class="h2">Daftar Pengaduan :</h1>
+        
       </div>
+      <p>Welcome <b><?php echo $name ;?></b></p>
+      <div class="container col-md-12">
+      <table class="table table-hover">
+        <thead class="bg-dark text-white ">
+            <tr>
+              <th>tanggal</th>
+              <th>isi laporan</th>
+              <th>bukti</th>
+              <th>status</th>
+              <th>Aksi</th>
+            </tr>
+        </thead>
+        <tbody >
+          <?php foreach($getdata as $data) : 
 
-         <form action="" class="form " method="post" enctype="multipart/form-data">
-            <input type="date" name="tanggal">
-            <textarea id="" cols="30" rows="10" name="isi" class="form-control bg-secondary mb-3 text-white"></textarea>
-            <input type="file" class="form-control bg-secondary text-white mb-3" name="gambar">
-            <div class="container text-right">
-               <button type="submit" name="submit" class="btn btn-success btn-lg pl-5 pr-5">
-                submit
-               </button>
-           </div>
-        </form>
+            $status = $data['status'];
+            if($status == '0'){
+              $status = 'terkirim';
+            }else if($status == 'proses'){
+              $status = 'terbaca';
+            }else{
+              $status = 'diterima';
+            }
+            ?>
+          <tr>
 
+            <td><?php echo $data['tgl_pengaduan'];?></td>
+            <td><?php echo $data['isi_laporan'];?></td>
+            <td><img src="../../img/<?php echo $data['foto'];?>"  width ="50px"alt=""></td>
+            <td class="text-success "><b><?php echo $status ;?></b></td>
+            <td>
+              <form action="" method="post">
+                <button value="<?php echo $data['id_pengaduan'] ;?>"type="submit" class="btn btn-link text-primary" name="verify">verify</button>
+              </form>
+            </td>
+          </tr>
+        <?php endforeach ;?>
+        </tbody>
+      </table>
+    </div>
     </main>
+
+  
   </div>
 </div>
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>

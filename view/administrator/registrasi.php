@@ -1,5 +1,5 @@
 <?php
-require '../function.php';
+require '../../function.php';
 
 
 if(isset($_POST['submit'])){
@@ -15,6 +15,7 @@ if(isset($_POST['submit'])){
 ?>
 
 <!doctype html>
+<!-- registrasi untuk penambahan admin/petugas -->
 <html lang="en">
   <head>
     <meta charset="utf-8">
@@ -27,7 +28,7 @@ if(isset($_POST['submit'])){
     <link rel="canonical" href="https://getbootstrap.com/docs/4.5/examples/sign-in/">
 
     <!-- Bootstrap core CSS -->
-<link href="../assets/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="../../assets/dist/css/bootstrap.min.css" rel="stylesheet">
 
     <style>
       .bd-placeholder-img {
@@ -46,12 +47,12 @@ if(isset($_POST['submit'])){
       }
     </style>
     <!-- Custom styles for this template -->
-    <link href="../css/signin.css" rel="stylesheet">
+    <link href="../../css/signin.css" rel="stylesheet">
   </head>
   <body class="text-center">
     <form class="form-signin" method="post" action="">
       
-      <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
+      <h1 class="h3 mb-3 font-weight-normal">Sign Up</h1>
 
       <label for="nama" class="sr-only">nama petugas</label>
       <input type="text" id="nama" class="form-control" placeholder="nama petugas" required name="namapetugas" autofocus>

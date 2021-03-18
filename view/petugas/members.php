@@ -1,19 +1,26 @@
 <?php
-require '../../function.php';
 session_start();
-if(!isset($_SESSION['login'])){
-  header('location:../../index.php');
-  exit;
-}
+require '../../db.php';
+  //simpan session username
+  $name = $_SESSION['username'];
 
-if(isset($_POST['submit'])){
-  $nik = $_SESSION['nik'];
-  tanggapan($nik,$_POST);
-}
+  //cek sudahkah login
+  if(!isset($_SESSION['login'])){
+    header('location:../../index.php');
+    exit;
+  }
+  //cek apakah anda petugas
+  if($_SESSION['level'] != 'petugas'){
+    header('location:../../index.php');
+  }
+
+$sql = "SELECT * FROM masyarakat";
+$query = mysqli_query($conn,$sql);
+$getdata =mysqli_fetch_All($query,MYSQLI_ASSOC);
 
 
 ?>
-<!-- file pengaduan -->
+
 <!doctype html>
 <html lang="en">
   <head>
@@ -57,12 +64,12 @@ if(isset($_POST['submit'])){
   <input class="form-control form-control-dark w-100" type="text" placeholder="Search" aria-label="Search">
   <ul class="navbar-nav px-3">
     <li class="nav-item text-nowrap">
-      <a class="nav-link" href="../logout.php">Sign out</a>
+      <a class="nav-link" href="logout.php">Sign out</a>
     </li>
   </ul>
 </nav>
 
-<div class="container-fluid">
+<div class="container-fluid ">
   <div class="row">
     <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
       <div class="sidebar-sticky pt-3">
@@ -73,38 +80,57 @@ if(isset($_POST['submit'])){
               Dashboard <span class="sr-only">(current)</span>
             </a>
           </li>
+
           <li class="nav-item">
-            <a class="nav-link" href="tanggapan.php">
-              <span data-feather="file"></span>
-              tanggapn
+            <a class="nav-link active" href="members.php">
+              <span data-feather="users"></span>
+              members
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link active" href="#">
+            <a class="nav-link" href="pengaduan.php">
               <span data-feather="bar-chart-2"></span>
-             Pengaduan
+              Pengaduan
             </a>
           </li>
+
         </ul>
       </div>
     </nav>
+
     <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-md-4">
-      <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom"> 
-      <h1>Buat pengaduan</h1>
+      <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+        <h1 class="h2">Daftar pengguna</h1>
+        <a href="registrasi.php" class="btn btn-success" >registrasi</a>
       </div>
-
-         <form action="" class="form " method="post" enctype="multipart/form-data">
-            <input type="date" name="tanggal">
-            <textarea id="" cols="30" rows="10" name="isi" class="form-control bg-secondary mb-3 text-white"></textarea>
-            <input type="file" class="form-control bg-secondary text-white mb-3" name="gambar">
-            <div class="container text-right">
-               <button type="submit" name="submit" class="btn btn-success btn-lg pl-5 pr-5">
-                submit
-               </button>
-           </div>
-        </form>
-
+      <p>Welcome <b><?php echo $name ;?></b></p>
+      <div class="container col-md-12">
+      <table class="table table-hover">
+        <thead class="bg-dark text-white ">
+            <tr>
+              <th>Nik</th>
+              <th>Nama</th>
+              <th>Username</th>
+              <th>telp</th>
+              <th>Aksi</th>
+            </tr>
+        </thead>
+        <tbody >
+          <?php foreach($getdata as $data) : ;?>
+          <tr>
+            <td><?php echo $data['nik'];?></td>
+            <td><?php echo $data['nama'];?></td>
+            <td><?php echo $data['username'];?></td>
+            <td><?php echo $data['telp'];?></td>
+            <td><a href="" class="text-danger">Delete</a></td>
+          </tr>
+        <?php endforeach ;?>
+        </tbody>
+      </table>
+    </div>
     </main>
+
+  
   </div>
 </div>
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>

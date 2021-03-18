@@ -1,20 +1,27 @@
 <?php
-require '../../function.php';
+require '../../db.php';
 session_start();
-if(!isset($_SESSION['login'])){
-  header('location:../../index.php');
-  exit;
-}
+  //simpan session username
+  $name = $_SESSION['username'];
 
-if(isset($_POST['submit'])){
-  $nik = $_SESSION['nik'];
-  tanggapan($nik,$_POST);
-}
+  //cek sesi
+  if(!isset($_SESSION['login'])){
+    header('location:login.php');
+    exit;
+  }
+  //cek level 
+  if($_SESSION['level'] != 'admin'){
+    header('location:login.php');
+  }
 
+$sql = "SELECT * FROM tanggapan";
+$execute = mysqli_query($conn,$sql);
+$getdata = mysqli_fetch_All($execute,MYSQLI_ASSOC);
 
 ?>
-<!-- file pengaduan -->
+
 <!doctype html>
+<!--  halaman untuk admin dashboard-->
 <html lang="en">
   <head>
     <meta charset="utf-8">
@@ -68,42 +75,55 @@ if(isset($_POST['submit'])){
       <div class="sidebar-sticky pt-3">
         <ul class="nav flex-column">
           <li class="nav-item">
-            <a class="nav-link " href="index.php">
+            <a class="nav-link active" href="index.php">
               <span data-feather="home"></span>
               Dashboard <span class="sr-only">(current)</span>
             </a>
           </li>
+
           <li class="nav-item">
-            <a class="nav-link" href="tanggapan.php">
-              <span data-feather="file"></span>
-              tanggapn
+            <a class="nav-link" href="members.php">
+              <span data-feather="users"></span>
+              members
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link active" href="#">
+            <a class="nav-link" href="#">
               <span data-feather="bar-chart-2"></span>
-             Pengaduan
+              Reports
             </a>
           </li>
+
         </ul>
       </div>
     </nav>
+
     <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-md-4">
-      <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom"> 
-      <h1>Buat pengaduan</h1>
+      <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-5 border-bottom">
+        <h1 class="h2">Dashboard</h1>
+        <a href="registrasi.php" class="btn btn-success" >registrasi</a>
       </div>
-
-         <form action="" class="form " method="post" enctype="multipart/form-data">
-            <input type="date" name="tanggal">
-            <textarea id="" cols="30" rows="10" name="isi" class="form-control bg-secondary mb-3 text-white"></textarea>
-            <input type="file" class="form-control bg-secondary text-white mb-3" name="gambar">
-            <div class="container text-right">
-               <button type="submit" name="submit" class="btn btn-success btn-lg pl-5 pr-5">
-                submit
-               </button>
-           </div>
-        </form>
-
+      <p style="font-size:40px; " >Welcome <b><?php echo $name ;?></b></p>
+      
+       <table class="table table-hover col-md-10">
+        <thead class="bg-dark text-white ">
+            <tr>
+              <th>isi</th>
+              <th>Aksi</th>
+            </tr>
+        </thead>
+        <tbody >
+          <?php foreach($getdata as $data) : ?>
+          <tr>
+            <td><?php echo $data['tanggapan'];?></td>
+            <td>
+              <form action="generate.php" method="post">
+                <button value="<?php echo $data['id_tanggapan'] ;?>"type="submit" class="btn btn-link text-success" name="verify">generet report</button>
+              </form>
+            </td>
+          </tr>
+        <?php endforeach ;?>
+        </tbody>
     </main>
   </div>
 </div>

@@ -6,7 +6,7 @@ require '../../function.php';
 // submit true
 if(isset($_POST['submit'])){
   if(daftar($_POST) > 0 ){
-      header('Location:login.php');
+      header('Location:../../login.php');
   }else{
     // error
     echo mysqli_error($conn);

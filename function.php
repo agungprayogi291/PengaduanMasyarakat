@@ -65,3 +65,59 @@ function daftar($data){
 
 }
 
+
+
+function tanggapan($nik,$data){
+global $conn;
+  $nik = $nik;
+  $tanggal = $data['tanggal'];
+  $isi = $data['isi'];
+  $status = '0';
+  $gambar = upload();
+
+  //sql insert
+  $query = "INSERT INTO pengaduan(tgl_pengaduan,nik,isi_laporan,foto,status) VALUES('$tanggal','$nik','$isi','$gambar','$status')";
+  // execute 
+  
+mysqli_query($conn,$query);
+
+}
+function upload(){
+  // inisialisasi nilai
+  $namaFile = $_FILES['gambar']['name'];
+  $ukuranFile = $_FILES['gambar']['size'];
+  $error = $_FILES['gambar']['error'];
+  $tmpName = $_FILES['gambar']['tmp_name'];
+ 
+  
+  // cek extensi file
+  $exstensiGambarValid =['jpg','jpeg','png'];
+  $exstensiGambar =pathinfo($namaFile,PATHINFO_EXTENSION);
+  
+  //cek gambar atau bukan
+  if(!in_array($exstensiGambar, $exstensiGambarValid)){
+    echo "<script>
+      alert('upload not gambar');
+    </script>";
+    // hentikan program
+    return false;
+  }
+
+  //cek ukuran file
+  if($ukuranFile > 1000000){
+    echo "
+    <script>
+      alert('ukuran gambar terlalu besar');
+    </script>
+    ";
+    return false;
+  }
+
+  $namaFileBaru = uniqid();
+  $namaFileBaru .= '.';
+  $namaFileBaru .= $exstensiGambar;
+
+  //upload gambar
+ move_uploaded_file($tmpName,'../../img/' . $namaFileBaru);
+  return $namaFileBaru;
+}

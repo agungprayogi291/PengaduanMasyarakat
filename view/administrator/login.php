@@ -1,42 +1,45 @@
 <?php 
-// mulai sesi
 session_start();
-// hubungkan kehalam db koneksi;
 require '../../db.php';
 
-// tombol submit ditekan 
+
   if(isset($_POST['submit'])){
-    //dapatkan data dari inputan form 
     $username = $_POST['username'];
     $password = $_POST['password'];
 
-    //get data 
-    $acount = mysqli_query($conn,"SELECT * FROM masyarakat WHERE username = '$username'");
+    $acount = mysqli_query($conn,"SELECT * FROM petugas WHERE username = '$username'");
 
     //cek username
+
     if(mysqli_num_rows($acount) === 1){
       $data = mysqli_fetch_assoc($acount);
         if($password == $data['password']){
-
           // create session
-          $_SESSION['login'] = true;
-          $_SESSION['level'] ='';
-          //pindah halaman
+          $_SESSION['login'] =true;
+          $_SESSION['username'] = $username;
+          $_SESSION['password'] = $password;
+          $_SESSION['id_petugas'] = $data['id_petugas'];
+          $_SESSION['level'] = $data['level'];
+          if($data['level'] == 'admin'){
           header('location:index.php');
-          // stop code
-          exit;
+          
+          }else if($data['level'] == 'petugas'){
+            header('location:../petugas/index.php');
+            
+          }else{
+            return false;
+          }
+        
         }
     }
-    // error
+
     $error = true;
 
   }else if(isset($_POST['regist'])){
-    // kembali halaman registrasi
-     header('location:view/masyarakat/registrasi.php');
+     header('location:../registrasi.php');
   }
 
 ?>
-
 <!doctype html>
 <html lang="en">
   <head>
@@ -88,7 +91,6 @@ require '../../db.php';
       </div>
 
     <button class="btn btn-lg btn-primary btn-block" type="submit" name="submit">Sign in</button>
- 
     <p class="mt-5 mb-3 text-muted">&copy; 2020-2021</p>
      <?php if(isset($error)):?>
       <p class="text-danger ">username/password salah</p>
