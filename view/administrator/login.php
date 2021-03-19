@@ -72,7 +72,7 @@ require '../../db.php';
       }
     </style>
     <!-- Custom styles for this template -->
-    <link href="../../css/signin.css" rel="stylesheet">
+    <link href="../../assets/dist/css/signin.css" rel="stylesheet">
   </head>
   <body class="text-center">
    

@@ -91,7 +91,7 @@ function upload(){
  
   
   // cek extensi file
-  $exstensiGambarValid =['jpg','jpeg','png'];
+  $exstensiGambarValid =['jpg','jpeg','png','JPG','JPEG','PNG'];
   $exstensiGambar =pathinfo($namaFile,PATHINFO_EXTENSION);
   
   //cek gambar atau bukan

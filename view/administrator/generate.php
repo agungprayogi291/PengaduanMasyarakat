@@ -53,7 +53,7 @@ $id_tanggapan = $_POST['verify'];
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>Document</title>
 	<link href="../../assets/dist/css/bootstrap.min.css" rel="stylesheet">
- 	<link href="../../css/dashboard.css" rel="stylesheet">
+ 	<link href="../../assets/dist/css/dashboard.css" rel="stylesheet">
 </head>
 <body>
 	<div class="jumbotron">
@@ -82,9 +82,7 @@ $id_tanggapan = $_POST['verify'];
 	
 <script>
 	window.print();
-	if(window.print()){
-	window.location=' index.php';
-	}
+	
 </script>
 </body>
 </html>
