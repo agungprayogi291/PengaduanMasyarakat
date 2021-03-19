@@ -64,7 +64,7 @@ $getdata =mysqli_fetch_All($query,MYSQLI_ASSOC);
   <input class="form-control form-control-dark w-100" type="text" placeholder="Search" aria-label="Search">
   <ul class="navbar-nav px-3">
     <li class="nav-item text-nowrap">
-      <a class="nav-link" href="logout.php">Sign out</a>
+      <a class="nav-link" href="../logout.php">Sign out</a>
     </li>
   </ul>
 </nav>
@@ -101,7 +101,6 @@ $getdata =mysqli_fetch_All($query,MYSQLI_ASSOC);
     <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-md-4">
       <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
         <h1 class="h2">Daftar pengguna</h1>
-        <a href="registrasi.php" class="btn btn-success" >registrasi</a>
       </div>
       <p>Welcome <b><?php echo $name ;?></b></p>
       <div class="container col-md-12">
