@@ -34,7 +34,7 @@ function registrasi($data){
   // enkripsi password
   $sql = "INSERT INTO petugas VALUES('','$namapetugas','$username','$password','$telp','$level')";
   $execute = mysqli_query($conn,$sql);
-  header('location:petugas/index.php');
+  header('location:index.php');
 
 }
 

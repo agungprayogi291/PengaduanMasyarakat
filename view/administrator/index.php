@@ -81,18 +81,6 @@ $getdata = mysqli_fetch_All($execute,MYSQLI_ASSOC);
             </a>
           </li>
 
-          <li class="nav-item">
-            <a class="nav-link" href="members.php">
-              <span data-feather="users"></span>
-              members
-            </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">
-              <span data-feather="bar-chart-2"></span>
-              Reports
-            </a>
-          </li>
 
         </ul>
       </div>
