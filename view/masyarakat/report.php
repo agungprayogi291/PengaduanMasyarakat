@@ -96,7 +96,7 @@ if(isset($_POST['submit'])){
          <form action="" class="form " method="post" enctype="multipart/form-data">
             <input type="date" name="tanggal">
             <textarea id="" cols="30" rows="10" name="isi" class="form-control bg-secondary mb-3 text-white"></textarea>
-            <input type="file" class="form-control bg-secondary text-white mb-3" name="gambar">
+            <input type="file" class="form-control bg-secondary text-white mb-3" name="gambar" accept="image/*">
             <div class="container text-right">
                <button type="submit" name="submit" class="btn btn-success btn-lg pl-5 pr-5">
                 submit
