@@ -13,11 +13,6 @@ session_start();
   if($_SESSION['level'] != 'admin'){
     header('location:login.php');
   }
-
-$sql = "SELECT * FROM tanggapan";
-$execute = mysqli_query($conn,$sql);
-$getdata = mysqli_fetch_All($execute,MYSQLI_ASSOC);
-
 ?>
 
 <!doctype html>
@@ -29,7 +24,7 @@ $getdata = mysqli_fetch_All($execute,MYSQLI_ASSOC);
     <meta name="description" content="">
     <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
     <meta name="generator" content="Jekyll v4.1.1">
-    <title>Dashboard Template · Bootstrap</title>
+    <title>home</title>
 
     <link rel="canonical" href="https://getbootstrap.com/docs/4.5/examples/dashboard/">
 
@@ -57,14 +52,14 @@ $getdata = mysqli_fetch_All($execute,MYSQLI_ASSOC);
   </head>
   <body>
     <nav class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
-  <a class="navbar-brand col-md-3 col-lg-2 mr-0 px-3" href="#">Company name</a>
+  <a class="navbar-brand col-md-3 col-lg-2 mr-0 px-3" href="#">Desa Multi</a>
   <button class="navbar-toggler position-absolute d-md-none collapsed" type="button" data-toggle="collapse" data-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
-  <input class="form-control form-control-dark w-100" type="text" placeholder="Search" aria-label="Search">
+
   <ul class="navbar-nav px-3">
     <li class="nav-item text-nowrap">
-      <a class="nav-link" href="../logout.php">Sign out</a>
+      <a class="nav-link" href="logout.php">Sign out</a>
     </li>
   </ul>
 </nav>
@@ -80,41 +75,36 @@ $getdata = mysqli_fetch_All($execute,MYSQLI_ASSOC);
               Dashboard <span class="sr-only">(current)</span>
             </a>
           </li>
-
-
+           <li class="nav-item">
+            <a class="nav-link " href="pengaduan.php">
+              <span data-feather="home"></span>
+              pengaduan
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link " href="members.php">
+              <span data-feather="home"></span>
+             Members
+            </a>
+          </li>
         </ul>
       </div>
     </nav>
 
     <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-md-4">
       <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-5 border-bottom">
-        <h1 class="h2">Dashboard</h1>
+       <h2>Dashboard
+
+       </h2>
         <a href="registrasi.php" class="btn btn-success" >registrasi</a>
       </div>
-      <p style="font-size:40px; " >Welcome <b><?php echo $name ;?></b></p>
-      
-       <table class="table table-hover col-md-10">
-        <thead class="bg-dark text-white ">
-            <tr>
-              <th>isi</th>
-              <th>Aksi</th>
-            </tr>
-        </thead>
-        <tbody >
-          <?php foreach($getdata as $data) : ?>
-          <tr>
-            <td><?php echo $data['tanggapan'];?></td>
-            <td>
-              <form action="generate.php" method="post">
-                <button value="<?php echo $data['id_tanggapan'] ;?>"type="submit" class="btn btn-link text-success" name="verify">generet report</button>
-              </form>
-            </td>
-          </tr>
-        <?php endforeach ;?>
-        </tbody>
+      <p style="font-size:24px; " >Welcome <?php echo $name ;?></p>
+       
     </main>
+
   </div>
 </div>
+
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
       <script>window.jQuery || document.write('<script src="../assets/js/vendor/jquery.slim.min.js"><\/script>')</script><script src="../assets/dist/js/bootstrap.bundle.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/feather-icons/4.9.0/feather.min.js"></script>

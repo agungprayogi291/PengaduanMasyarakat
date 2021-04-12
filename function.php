@@ -70,13 +70,12 @@ function daftar($data){
 function tanggapan($nik,$data){
 global $conn;
   $nik = $nik;
-  $tanggal = $data['tanggal'];
   $isi = $data['isi'];
   $status = '0';
   $gambar = upload();
-
+  
   //sql insert
-  $query = "INSERT INTO pengaduan(tgl_pengaduan,nik,isi_laporan,foto,status) VALUES('$tanggal','$nik','$isi','$gambar','$status')";
+  $query = "INSERT INTO pengaduan(tgl_pengaduan,nik,isi_laporan,foto,status) VALUES(now(),'$nik','$isi','$gambar','$status')";
   // execute 
   
 mysqli_query($conn,$query);
@@ -89,7 +88,6 @@ function upload(){
   $error = $_FILES['gambar']['error'];
   $tmpName = $_FILES['gambar']['tmp_name'];
  
-  
   // cek extensi file
   $exstensiGambarValid =['jpg','jpeg','png','JPG','JPEG','PNG'];
   $exstensiGambar =pathinfo($namaFile,PATHINFO_EXTENSION);

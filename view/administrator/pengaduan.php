@@ -1,41 +1,58 @@
 <?php
+//mulai sessi
 session_start();
+
 require '../../db.php';
-  //simpan session username
+
+  //simpan,tangkap session username
  $name = $_SESSION['username'];
 
-  //sudahkah login
-if(!isset($_SESSION['login'])){
+    //belum login
+  if(!isset($_SESSION['login']))
+    {
+     //pindahkan kehalaman login  
+    header('location:../../index.php');
+    //hentikan eksekusi 
+    exit;
+    }
+    //jika level bukan petugas
+  if($_SESSION['level'] != 'admin')
+    {
+      //pindahkan kehalam login kembali
+    header('location:../../logout.php');
+    //hentikan eksekusi syintak
+    exit;
+    }
 
-
-  header('location:../../index.php');
-  exit;
-}
-//jika memiliki level 
-if($_SESSION['level'] != ''){
-  //pindah kembali login
-  header('location:login.php');
-  exit;
-}
-
-$sql = "SELECT * FROM pengaduan";
-$execute = mysqli_query($conn,$sql);
-$getdata = mysqli_fetch_All($execute,MYSQLI_ASSOC);
-
+    //jika tombol submit form verifikasi bernilai true
+  if(isset($_POST['verify']))
+    {
+      //tangkap idpengaduan
+      $idpengaduan = $_POST['verify'];
+      //set session id pengaduan 
+      $_SESSION['idpengaduan'] = $idpengaduan;
+      $cek = mysqli_query($conn, "UPDATE pengaduan SET status ='proses' WHERE id_pengaduan='$idpengaduan'");
+      //pindah kehalam tangga[]
+      header('location:tanggapan.php');
+    }
+    // syintak data dari table pengaduan
+      $sql = "SELECT * FROM pengaduan";
+    //eksekusi
+      $execute = mysqli_query($conn,$sql);
+    //ambil data semua
+      $getdata = mysqli_fetch_All($execute,MYSQLI_ASSOC);
 
 ?>
+
 <!doctype html>
 <html lang="en">
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
-    <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
-    <meta name="generator" content="Jekyll v4.1.1">
-    <title>tanggapan</title>
+    <title>pengaduan</title>
 
     <link rel="canonical" href="https://getbootstrap.com/docs/4.5/examples/dashboard/">
-
     <!-- Bootstrap core CSS -->
 <link href="../../assets/dist/css/bootstrap.min.css" rel="stylesheet">
 
@@ -64,7 +81,6 @@ $getdata = mysqli_fetch_All($execute,MYSQLI_ASSOC);
   <button class="navbar-toggler position-absolute d-md-none collapsed" type="button" data-toggle="collapse" data-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
-  <input class="form-control form-control-dark w-100" type="text" placeholder="Search" aria-label="Search">
   <ul class="navbar-nav px-3">
     <li class="nav-item text-nowrap">
       <a class="nav-link" href="logout.php">Sign out</a>
@@ -83,17 +99,16 @@ $getdata = mysqli_fetch_All($execute,MYSQLI_ASSOC);
               Dashboard <span class="sr-only">(current)</span>
             </a>
           </li>
-
-          <li class="nav-item">
-            <a class="nav-link active" href="tanggapan.php">
+           <li class="nav-item">
+            <a class="nav-link " href="members.php">
               <span data-feather="users"></span>
-            tanggapan
+              members
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="report.php">
+            <a class="nav-link active" href="pengaduan.php">
               <span data-feather="bar-chart-2"></span>
-              Pengaduan
+              pengaduan
             </a>
           </li>
 
@@ -104,7 +119,10 @@ $getdata = mysqli_fetch_All($execute,MYSQLI_ASSOC);
     <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-md-4">
       <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
         <h1 class="h2">Daftar Pengaduan :</h1>
-        
+         <div class="text-right">
+          <a class="btn btn-primary " href="generate.php">generet report</a>
+        </div>
+       
       </div>
       <p>Welcome <b><?php echo $name ;?></b></p>
       <div class="container col-md-12">
@@ -122,7 +140,8 @@ $getdata = mysqli_fetch_All($execute,MYSQLI_ASSOC);
           <?php foreach($getdata as $data) : 
 
             $status = $data['status'];
-               if($status == '0')
+            //status bernilai 0
+            if($status == '0')
             {
               //ubah menjadi terkirim
               $status = 'terkirim';
@@ -139,14 +158,19 @@ $getdata = mysqli_fetch_All($execute,MYSQLI_ASSOC);
               //status ubah menjadi diterima
               $status = '<p class="text-success">ditanggapi</p>';
             }
+            
             ?>
           <tr>
 
             <td><?php echo $data['tgl_pengaduan'];?></td>
             <td><?php echo $data['isi_laporan'];?></td>
             <td><img src="../../img/<?php echo $data['foto'];?>"  width ="50px"alt=""></td>
-            <td class="text-success "><b><?php echo $status ;?></b></td>
-            <td><a href="" class="text-danger">Delete</a></td>
+            <td ><b><?php echo $status ;?></b></td>
+            <td>
+              <form action="" method="post">
+                <button value="<?php echo $data['id_pengaduan'] ;?>"type="submit" class="btn btn-link text-primary" name="verify">verify</button>
+              </form>
+            </td>
           </tr>
         <?php endforeach ;?>
         </tbody>

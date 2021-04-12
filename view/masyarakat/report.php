@@ -5,7 +5,10 @@ if(!isset($_SESSION['login'])){
   header('location:../../index.php');
   exit;
 }
-
+if($_SESSION['level']  !== '' ){
+  header('Location:../logout.php');
+  exit;
+}
 if(isset($_POST['submit'])){
   $nik = $_SESSION['nik'];
   tanggapan($nik,$_POST);
@@ -22,7 +25,7 @@ if(isset($_POST['submit'])){
     <meta name="description" content="">
     <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
     <meta name="generator" content="Jekyll v4.1.1">
-    <title>Dashboard Template · Bootstrap</title>
+    <title>pengaduan</title>
 
     <link rel="canonical" href="https://getbootstrap.com/docs/4.5/examples/dashboard/">
 
@@ -57,7 +60,7 @@ if(isset($_POST['submit'])){
   <input class="form-control form-control-dark w-100" type="text" placeholder="Search" aria-label="Search">
   <ul class="navbar-nav px-3">
     <li class="nav-item text-nowrap">
-      <a class="nav-link" href="../logout.php">Sign out</a>
+      <a class="nav-link" href="logout.php">Sign out</a>
     </li>
   </ul>
 </nav>
@@ -94,7 +97,6 @@ if(isset($_POST['submit'])){
       </div>
 
          <form action="" class="form " method="post" enctype="multipart/form-data">
-            <input type="date" name="tanggal">
             <textarea id="" cols="30" rows="10" name="isi" class="form-control bg-secondary mb-3 text-white"></textarea>
             <input type="file" class="form-control bg-secondary text-white mb-3" name="gambar" accept="image/*">
             <div class="container text-right">

@@ -1,13 +1,10 @@
 <?php
+//mulai sesi
 session_start();
 require '../../db.php';
-  //simpan session username
- $name = $_SESSION['username'];
 
     //cek sesi
   if(!isset($_SESSION['login'])){
-
-
     header('location:../../index.php');
     exit;
   }
@@ -15,29 +12,38 @@ require '../../db.php';
     header('location:login.php');
     exit;
   }
+   //tangkap sesion  username
+   $name = $_SESSION['username'];
+    //tangkap session id petugas
+   $idPetugas = $_SESSION['id_petugas'];
+    //tangkap session id pengaduan
+   $idPengaduan = $_SESSION['idpengaduan'];
 
-  //id petugas
-$idPetugas = $_SESSION['id_petugas'];
-$idPengaduan = $_SESSION['idpengaduan'];
+  //jika tombol submit true
+  if(isset($_POST['submit'])){
+    //tangkap inputan tanggapn 
+    $tanggapan = $_POST['tanggapan'];
+    //insert data
+    $sql = "INSERT INTO tanggapan(id_pengaduan,tgl_tanggapan,tanggapan,id_petugas) VALUES('$idPengaduan',now(),'$tanggapan','$idPetugas')";
+    //eksekusi 
+    $execute = mysqli_query($conn, $sql);
 
-if(isset($_POST['submit'])){
-  $tanggal = $_POST['tanggal'];
-  $tanggapan = $_POST['tanggapan'];
-  $sql = "INSERT INTO tanggapan(id_pengaduan,tgl_tanggapan,tanggapan,id_petugas) VALUES('$idPengaduan','$tanggal','$tanggapan','$idPetugas')";
-  $execute = mysqli_query($conn, $sql);
-
-  if($execute){
-    echo "<script>
-    alert('tanggapan terkirim');
-    </script>";
-  }else{
-    echo "
-    <script>
-     alert('tanggapan gagal dikitim');
-    </script>
-    ";
+      //jika eksekusi berhasil
+      if($execute){
+        echo "<script>
+        alert('tanggapan terkirim');
+        window.location.href='pengaduan.php';
+        </script>";
+      }
+      //jika eksekusi gagal
+      else{
+        echo "
+        <script>
+         alert('tanggapan gagal dikitim');
+        </script>
+        ";
+      }
   }
-}
 ?>
 <!-- file pengaduan -->
 <!doctype html>
@@ -46,12 +52,9 @@ if(isset($_POST['submit'])){
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
-    <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
-    <meta name="generator" content="Jekyll v4.1.1">
-    <title>Dashboard Template · Bootstrap</title>
+    <title>tanggapan</title>
 
     <link rel="canonical" href="https://getbootstrap.com/docs/4.5/examples/dashboard/">
-
     <!-- Bootstrap core CSS -->
 <link href="../../assets/dist/css/bootstrap.min.css" rel="stylesheet">
 
@@ -83,7 +86,7 @@ if(isset($_POST['submit'])){
   <input class="form-control form-control-dark w-100" type="text" placeholder="Search" aria-label="Search">
   <ul class="navbar-nav px-3">
     <li class="nav-item text-nowrap">
-      <a class="nav-link" href="../logout.php">Sign out</a>
+      <a class="nav-link" href="logout.php">Sign out</a>
     </li>
   </ul>
 </nav>
@@ -126,7 +129,6 @@ if(isset($_POST['submit'])){
       </div>
 
          <form action="" class="form " method="post" enctype="multipart/form-data">
-           <input type="date" name="tanggal" class="form-control mb-3 bg-secondary text-white">
            <textarea name="tanggapan" id="" cols="30" rows="10" class="form-control bg-secondary text-white">
              
            </textarea>

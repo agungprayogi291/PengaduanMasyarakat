@@ -1,4 +1,6 @@
 <?php
+
+//syintak koneksi datbase
 $host = "localhost";
 $username = "root";
 $pass = "";

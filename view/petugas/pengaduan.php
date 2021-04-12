@@ -1,4 +1,5 @@
 <?php
+//mulai sessi
 session_start();
 
 require '../../db.php';
@@ -6,26 +7,41 @@ require '../../db.php';
   //simpan,tangkap session username
  $name = $_SESSION['username'];
 
-  //cek sudahkan login
-if(!isset($_SESSION['login'])){
+    //belum login
+  if(!isset($_SESSION['login']))
+    {
+     //pindahkan kehalaman login  
+    header('location:../../index.php');
+    //hentikan eksekusi 
+    exit;
+    }
+    //jika level bukan petugas
+  if($_SESSION['level'] != 'petugas')
+    {
+      //pindahkan kehalam login kembali
+    header('location:login.php');
+    //hentikan eksekusi syintak
+    exit;
+    }
 
-  header('location:../../index.php');
-  exit;
-}
-if($_SESSION['level'] != 'petugas'){
-  header('location:login.php');
-  exit;
-}
+    //jika tombol submit form verifikasi bernilai true
+  if(isset($_POST['verify']))
+    {
+      //tangkap idpengaduan
+      $idpengaduan = $_POST['verify'];
+      //set session id pengaduan 
+      $_SESSION['idpengaduan'] = $idpengaduan;
+      $cek = mysqli_query($conn, "UPDATE pengaduan SET status ='proses' WHERE id_pengaduan='$idpengaduan'");
+      //pindah kehalam tangga[]
+      header('location:tanggapan.php');
+    }
 
-if(isset($_POST['verify'])){
-  $idpengaduan = $_POST['verify'];
-  $_SESSION['idpengaduan'] = $idpengaduan;
-  $cek = mysqli_query($conn, "UPDATE pengaduan SET status ='proses' WHERE id_pengaduan='$idpengaduan'");
-  header('location:tanggapan.php');
-}
-  $sql = "SELECT * FROM pengaduan";
-  $execute = mysqli_query($conn,$sql);
-  $getdata = mysqli_fetch_All($execute,MYSQLI_ASSOC);
+    // syintak data dari table pengaduan
+      $sql = "SELECT * FROM pengaduan";
+    //eksekusi
+      $execute = mysqli_query($conn,$sql);
+    //ambil data semua
+      $getdata = mysqli_fetch_All($execute,MYSQLI_ASSOC);
 
 ?>
 
@@ -37,7 +53,7 @@ if(isset($_POST['verify'])){
     <meta name="description" content="">
     <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
     <meta name="generator" content="Jekyll v4.1.1">
-    <title>Dashboard Template · Bootstrap</title>
+    <title>pengaduan</title>
 
     <link rel="canonical" href="https://getbootstrap.com/docs/4.5/examples/dashboard/">
 
@@ -72,7 +88,7 @@ if(isset($_POST['verify'])){
   <input class="form-control form-control-dark w-100" type="text" placeholder="Search" aria-label="Search">
   <ul class="navbar-nav px-3">
     <li class="nav-item text-nowrap">
-      <a class="nav-link" href="../logout.php">Sign out</a>
+      <a class="nav-link" href="logout.php">Sign out</a>
     </li>
   </ul>
 </nav>
@@ -126,12 +142,23 @@ if(isset($_POST['verify'])){
           <?php foreach($getdata as $data) : 
 
             $status = $data['status'];
-            if($status == '0'){
+            //status bernilai 0
+            if($status == '0')
+            {
+              //ubah menjadi terkirim
               $status = 'terkirim';
-            }else if($status == 'proses'){
-              $status = 'terbaca';
-            }else{
-              $status = 'diterima';
+
+            }
+            //status bernilai proses
+            else if($status == 'proses')
+            {
+              //ubah menjadi terbaca
+              $status = '<p class="text-primary">terbaca</p>';
+            }
+            else
+            {
+              //status ubah menjadi diterima
+              $status = '<p class="text-success">ditanggapi</p>';
             }
             ?>
           <tr>

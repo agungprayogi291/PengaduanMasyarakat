@@ -6,18 +6,20 @@ require 'db.php';
 
 // tombol submit ditekan 
   if(isset($_POST['submit'])){
+	  
     //dapatkan data dari inputan form 
     $username = $_POST['username'];
     $password = $_POST['password'];
 
     //get data 
+	
     $acount = mysqli_query($conn,"SELECT * FROM masyarakat WHERE username = '$username'");
 
     //cek username
+	
     if(mysqli_num_rows($acount) === 1){
       $data = mysqli_fetch_assoc($acount);
         if($password == $data['password']){
-
           // create session
           $_SESSION['login'] = true;
           $_SESSION['nik'] = $data['nik'];
@@ -29,6 +31,7 @@ require 'db.php';
           exit;
         }
     }
+	
     // error
     $error = true;
 
@@ -42,6 +45,7 @@ require 'db.php';
 <!doctype html>
 <html lang="en">
   <head>
+    <!-- ini adalah halam login -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
@@ -52,6 +56,7 @@ require 'db.php';
     <link rel="canonical" href="https://getbootstrap.com/docs/4.5/examples/sign-in/">
 
     <!-- Bootstrap core CSS -->
+
   <link href="assets/dist/css/bootstrap.min.css" rel="stylesheet">
 
     <style>
